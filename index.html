@@ -251,9 +251,10 @@
 <figure class="shot"><a href="images/import-demo.jpg"><img src="images/import-demo.jpg" alt="The One Click Demo Import screen with the six Dentalora demos"></a><figcaption>Appearance &rarr; Import Demo Data lists the six demos. Pick one and click Import Demo.</figcaption></figure>
 <h3>What the import creates</h3>
 <ul>
-<li>Fifteen Elementor pages: six home pages (one per preset), About, Services, a service example, Our team, Pricing, Reviews, FAQ, Contact and Before and after. Plus a Journal page (set as your posts page) and a Privacy policy placeholder.</li>
-<li>Six journal posts, six services, three doctors, six FAQ entries and six patient reviews.</li>
-<li>Five menus, assigned to their locations, and blog sidebar widgets.</li>
+<li>Nineteen Elementor pages: six home pages (one per preset), About, Services, a service example, Our team, Pricing, Reviews, FAQ, Contact, Before and after, and four blog pages (Blog grid, Blog grid with sidebar, Blog list and Blog standard). Plus a Journal page (set as your posts page) and a Privacy policy placeholder.</li>
+<li>Eleven journal posts with categories and topics (two of them in the sidebar and cover post layouts), six services, three doctors, six FAQ entries and six patient reviews.</li>
+<li>Five menus, assigned to their locations (the main menu has a Journal dropdown with the blog pages), and blog sidebar widgets.</li>
+<li>If your site still uses plain links (<code>?p=123</code>), they are switched to post names (<strong>Settings &rarr; Permalinks &rarr; Post name</strong>) so the demo menus and buttons open the right pages. A site with its own link structure keeps it.</li>
 <li>The home page of the demo you chose is set as your front page and the matching preset is selected.</li>
 <li>Clinic details (address, hours, phone, email) are filled in with <strong>fictional placeholders</strong>. Replace them under <strong>Dentalora &rarr; Clinic details</strong>.</li>
 <!--img3-->
@@ -1436,6 +1437,7 @@
 <section class="doc-section" id="child">
 <h2>13. Child theme</h2>
 <p>Use the child theme if you want to change templates or add CSS without losing the changes when the theme is updated. Upload and activate <code>dentalora-child.zip</code>. Add your CSS in its <code>style.css</code> and PHP in its <code>functions.php</code>. To change a template, copy it from the parent theme into the child theme folder and edit the copy.</p>
+<p>When you activate the child theme the first time, it takes over your Customizer settings and menu locations from Dentalora, so the site looks the same straight away.</p>
 <p>The child theme already loads its stylesheet after the parent's. This is what its <code>functions.php</code> does:</p>
 <pre><code>function dentalora_child_enqueue_styles() {
 	wp_enqueue_style(
