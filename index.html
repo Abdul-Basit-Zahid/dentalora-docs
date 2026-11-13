@@ -104,11 +104,29 @@
 	figure.shot figcaption { margin-top: 10px; color: var(--muted); font-size: 14.5px; line-height: 1.55; }
 	figure.shot.phone { max-width: 300px; }
 	.shots { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 24px; align-items: start; }
+	/* Widget guide: one collapsible entry per widget. */
+	h4 { margin: 22px 0 6px; color: var(--text); font-family: "Manrope", "Figtree", system-ui, sans-serif; font-size: 16px; font-weight: 800; letter-spacing: -0.02em; }
+	.wg-jump { display: flex; flex-wrap: wrap; gap: 8px; max-width: none; margin: 16px 0 22px; }
+	.wg-jump a { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); font-size: 14px; text-decoration: none; }
+	.wg-jump a:hover { border-color: var(--brand); color: var(--brand); }
+	details.wg { max-width: none; margin: 12px 0; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+	details.wg[open] { box-shadow: 0 10px 28px rgba(15, 58, 122, 0.08); }
+	details.wg > summary { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; padding: 16px 20px; cursor: pointer; list-style: none; }
+	details.wg > summary::-webkit-details-marker { display: none; }
+	details.wg > summary::after { content: "+"; grid-column: 2; grid-row: 1; justify-self: end; color: var(--muted); font-size: 22px; line-height: 1; }
+	details.wg[open] > summary::after { content: "\2212"; }
+	.wg-name { color: var(--text); font-family: "Manrope", "Figtree", system-ui, sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+	.wg-group { grid-column: 1 / -1; grid-row: 2; color: var(--accent); font-size: 13px; font-weight: 700; }
+	.wg-what { grid-column: 1 / -1; color: var(--muted); font-size: 15px; line-height: 1.55; }
+	.wg-body { padding: 0 20px 20px; border-top: 1px solid var(--line); }
+	.wg-table th[scope="row"] { width: 34%; font-weight: 600; }
+	.wg-table .wg-sec { padding-top: 16px; background: var(--soft); color: var(--accent); font-size: 14px; }
+	nav a.sub { padding: 4px 10px 4px 24px; font-size: 14px; }
 	@media (max-width: 720px) { .shots { grid-template-columns: minmax(0, 1fr); } }
 	@media (max-width: 980px) { .steps { grid-template-columns: minmax(0, 1fr); } }
 	@media (max-width: 820px) { .layout { display: block; } nav { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); } main { padding-top: 32px; } .docbar .in { padding: 0 16px; } }
 	@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-	@media print { .docbar, nav, .search, .copy, .totop { display: none !important; } .layout { display: block; } .doc-section[hidden] { display: block; } pre { border: 1px solid #999; background: #fff; color: #000; } }
+	@media print { .docbar, nav, .search, .copy, .totop, .wg-jump { display: none !important; } .layout { display: block; } .doc-section[hidden] { display: block; } pre { border: 1px solid #999; background: #fff; color: #000; } }
 </style>
 <noscript><style>.search { display: none !important; }</style></noscript>
 <script>document.documentElement.className += ' js';</script>
@@ -144,8 +162,11 @@
 	<a href="#menus" data-target="menus">8. Menus and widget areas</a>
 	<a href="#content" data-target="content">9. Services, doctors, FAQ, reviews</a>
 	<a href="#elementor" data-target="elementor">10. Elementor widgets</a>
-	<a href="#layouts" data-target="layouts">11. Header, footer and archives</a>
-	<a href="#form" data-target="form">12. Enquiry form</a>
+	<a class="sub" href="#widget-guide">Widget guide (all 29)</a>
+	<a href="#layouts" data-target="layouts">11. Header, footer and blog</a>
+	<a class="sub" href="#blog">Blog pages and layouts</a>
+	<a href="#form" data-target="form">12. Appointment requests</a>
+	<a class="sub" href="#booking-steps">Set up in 7 steps</a>
 	<div class="group">Customising</div>
 	<a href="#child" data-target="child">13. Child theme</a>
 	<a href="#translate" data-target="translate">14. Translation and RTL</a>
@@ -265,7 +286,7 @@
 <tr><th>Header</th><td>Show the top bar, keep the header visible while scrolling, show the phone button, the Call and Book bar on phones, header button label and link, and whether the button opens in a new tab.</td></tr>
 <tr><th>Emergency banner</th><td>A short message above the header, with an optional link, two styles and a close button. See below.</td></tr>
 <tr><th>Footer</th><td>Copyright text. Leave it empty to show the year and site title.</td></tr>
-<tr><th>Blog</th><td>Blog layout, sidebar, table of contents on posts, reading progress bar, author box and related posts.</td></tr>
+<tr><th>Blog</th><td>Blog layout (grid, list or standard), sidebar and its side, post layout (standard, with sidebar or full-width cover), table of contents on posts, reading progress bar, author box and related posts. See <a href="#blog">Blog pages and layouts</a>.</td></tr>
 <tr><th>Motion</th><td>Fade-in and count-up on scroll, tilt on cards, parallax on large images and the button ripple. See <a href="#motion">section 7</a>.</td></tr>
 </table></div>
 <p>Your site logo, site title and tagline are in the standard <strong>Site Identity</strong> section.</p>
@@ -348,7 +369,17 @@
 
 <section class="doc-section" id="elementor">
 <h2>10. Elementor widgets</h2>
-<p>Edit any page with Elementor. In the widget panel look for the <strong>Dentalora</strong> category. Widgets are designed to be stacked full width, one per section. The table lists all 29 widgets, the layouts or modes each one offers, a few of its key controls and how many content controls it has.</p>
+<p>Edit any page with Elementor. In the widget panel look for the <strong>Dentalora</strong> category. Widgets are designed to be stacked full width, one per section.</p>
+<h3>Add a widget to a page, step by step</h3>
+<ol>
+<li>Open <strong>Pages</strong>, hover the page and click <strong>Edit with Elementor</strong> (or create a page with <strong>Pages &rarr; Add New</strong> and click <em>Edit with Elementor</em>).</li>
+<li>Click the <strong>+</strong> icon on the page and choose a one-column structure. Widgets are made to fill the full width, so one widget per section works best.</li>
+<li>In the panel on the left, search for the widget or scroll to the <strong>Dentalora</strong> category and drag the widget into the section.</li>
+<li>Fill in the <strong>Content</strong> tab: the heading, the layout and the items. Most widgets start with example content so you can see the layout straight away.</li>
+<li>Open the <strong>Style</strong> tab to change colours for light and dark mode and to style each part (see <a href="#style-tab">the Style tab</a>). Leave a field empty to use the design preset's value.</li>
+<li>Click <strong>Update</strong>. Check the page on a phone too: in the bottom bar of Elementor, the responsive mode button shows tablet and phone sizes.</li>
+</ol>
+<p>The table lists all 29 widgets at a glance. The <a href="#widget-guide">widget guide</a> below explains each one with a picture, the steps to set it up and every setting.</p>
 <figure class="shot"><a href="images/elementor-widgets.jpg"><img src="images/elementor-widgets.jpg" alt="The Elementor editor with the Dentalora widgets in the panel"></a><figcaption>The Dentalora widgets in the Elementor panel, next to a demo home page.</figcaption></figure>
 <figure class="shot"><a href="images/elementor-style.jpg"><img src="images/elementor-style.jpg" alt="The Style tab of the Hero widget in Elementor"></a><figcaption>Every Dentalora widget has a Style tab: colours for light and dark mode, and one Style section for each part of the widget.</figcaption></figure>
 <!-- widgets:start -->
@@ -389,16 +420,915 @@
 <tr><th scope="row">Enquiry form</th><td>Appointment request form: honeypot, security token and server-side checks; sends an email.</td><td>Full enquiry form, Appointment request</td><td>Form, Reassurances beside the form, Enquiry types, Book an appointment, Ask a question</td><td class="num">16</td></tr>
 <tr><th scope="row">Location and opening hours</th><td>Address, opening hours, a map picture and directions links.</td><td>&ndash;</td><td>Details, Note under the phone number, Extra rows, Map, Map picture</td><td class="num">11</td></tr>
 <tr class="group-row"><th colspan="5">Content</th></tr>
-<tr><th scope="row">Journal posts</th><td>Latest posts as a featured layout or cards; also used for blog and archive layouts.</td><td>One featured post and a stack, Equal cards</td><td>Posts, Number of posts, Only from these categories, Link text</td><td class="num">6</td></tr>
+<tr><th scope="row">Journal posts</th><td>Blog posts as a featured layout, grid, list or standard layout, with page numbers and a blog sidebar; also used for archive layouts.</td><td>One featured post and a stack, Grid of cards, List: picture beside the text, Standard: large picture above the text</td><td>Posts, Number of posts, Show page numbers, Only from these categories, Show a short excerpt</td><td class="num">17</td></tr>
 </tbody>
-<tfoot><tr><th scope="row" colspan="4">All 29 widgets</th><td class="num">290</td></tr></tfoot>
+<tfoot><tr><th scope="row" colspan="4">All 29 widgets</th><td class="num">301</td></tr></tfoot>
 </table></div>
 <!-- widgets:end -->
+
+<h3 id="widget-guide">Widget guide: all 29 widgets, one by one</h3>
+<p>Click a widget to open its entry: what it is for, how to set it up, every setting in its Content tab and the parts you can style. The pictures in this online guide are from the live demo; the download comes with placeholder pictures.</p>
+<!-- widget-guide:start -->
+<div class="wg-jump">
+<a href="#w-topbar">Top bar</a>
+<a href="#w-navbar">Navigation bar</a>
+<a href="#w-footer">Footer</a>
+<a href="#w-page-header">Page header</a>
+<a href="#w-marquee">Marquee strip</a>
+<a href="#w-cta-band">Call-to-action band</a>
+<a href="#w-hero">Hero</a>
+<a href="#w-about">About and philosophy</a>
+<a href="#w-partners">Partners and trust bar</a>
+<a href="#w-features">Feature cards</a>
+<a href="#w-numbers">Numbers band</a>
+<a href="#w-why-us">Why choose us</a>
+<a href="#w-services">Services</a>
+<a href="#w-process">Process steps</a>
+<a href="#w-pricing">Pricing plans</a>
+<a href="#w-before-after">Before and after</a>
+<a href="#w-estimator">Cost estimator</a>
+<a href="#w-guide">Guided chooser</a>
+<a href="#w-comparison">Comparison tabs</a>
+<a href="#w-insights">Insights board</a>
+<a href="#w-info-cards">Info cards with filter</a>
+<a href="#w-team">Team and doctors</a>
+<a href="#w-testimonials">Reviews</a>
+<a href="#w-gallery">Clinic gallery</a>
+<a href="#w-timeline">Timeline and journey</a>
+<a href="#w-faq">FAQ accordion</a>
+<a href="#w-contact-form">Enquiry form</a>
+<a href="#w-location">Location and opening hours</a>
+<a href="#w-journal">Journal posts</a>
+</div>
+<details class="wg" id="w-topbar">
+<summary><span class="wg-name">Top bar</span><span class="wg-group">Page structure</span><span class="wg-what">Thin bar above the header with address, hours and emergency number from Clinic details.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/topbar.jpg"><img src="images/widgets/topbar.jpg" alt="The Top bar widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>A thin bar above the header with your address, opening hours, a short note and an emergency number.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Fill in your details once in Dentalora &rarr; Clinic details.</li>
+<li>Leave "Use the clinic details" on and the bar shows them everywhere; switch it off to type different text in this widget.</li>
+<li>Put it in a Header layout template (section 11) above the Navigation bar so it shows on every page.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Content</th></tr>
+<tr><th scope="row">Use the clinic details</th><td>Reads Dentalora &gt; Clinic details. Turn off to type the text here.</td></tr>
+<tr><th scope="row">Address</th><td>Text.</td></tr>
+<tr><th scope="row">Opening hours (one line per entry)</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Note</th><td>Text.</td></tr>
+<tr><th scope="row">Emergency phone</th><td>Text.</td></tr>
+<tr><th colspan="2" class="wg-sec">Labels and fixed texts</th></tr>
+<tr><th scope="row">1 texts</th><td>Every fixed word of the widget can be changed here, for example: Emergency number prefix.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Top bar</em>, <em>Style: Items</em>, <em>Style: Dividers</em>, <em>Style: Emergency number</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-navbar">
+<summary><span class="wg-name">Navigation bar</span><span class="wg-group">Page structure</span><span class="wg-what">Header with logo, menu, phone button, light/dark toggle and mobile menu.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/navbar.jpg"><img src="images/widgets/navbar.jpg" alt="The Navigation bar widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>The site header: logo or name, menu, phone button, light/dark toggle and the phone menu.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Under Brand, choose a "Logo image" or type the "Brand name" and an optional "Tagline".</li>
+<li>Under Menu and buttons, pick the menu to show (create it first in Appearance &rarr; Menus). Sub-menus open as dropdowns, such as the Journal menu in the demo.</li>
+<li>Set the "Button label" and "Button link" (for example your contact page or an online booking service) and choose whether to show the phone number and the light/dark toggle.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Brand</th></tr>
+<tr><th scope="row">Logo image</th><td>Leave empty to use the site logo, or the site title with a mark.</td></tr>
+<tr><th scope="row">Brand name</th><td>Text.</td></tr>
+<tr><th scope="row">Tagline</th><td>Text.</td></tr>
+<tr><th colspan="2" class="wg-sec">Menu and buttons</th></tr>
+<tr><th scope="row">Menu</th><td>Choose one of your menus (Appearance &rarr; Menus).</td></tr>
+<tr><th scope="row">Show the phone number</th><td>On or off.</td></tr>
+<tr><th scope="row">Button label</th><td>Text.</td></tr>
+<tr><th scope="row">Button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th scope="row">Show the light/dark toggle</th><td>On or off.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Navigation bar</em>, <em>Style: Brand name</em>, <em>Style: Brand tagline</em>, <em>Style: Menu links</em>, <em>Style: Phone / action buttons</em>, <em>Style: Mobile menu panel</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-footer">
+<summary><span class="wg-name">Footer</span><span class="wg-group">Page structure</span><span class="wg-what">Footer with link columns, clinic details, social links and legal links.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/footer.jpg"><img src="images/widgets/footer.jpg" alt="The Footer widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>The site footer: brand and social links, two link columns, a contact column and a bottom row with copyright and legal links.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Type the name and short description under Brand and pick the "Social links menu".</li>
+<li>Choose a menu for "Column 1 menu" and "Column 2 menu"; the contact column reads Dentalora &rarr; Clinic details.</li>
+<li>Under Bottom row, type the copyright text (leave empty for the year and site name) and pick the "Legal links menu".</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Brand</th></tr>
+<tr><th scope="row">Name</th><td>Text.</td></tr>
+<tr><th scope="row">Short description</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Social links menu</th><td>Choose one of your menus (Appearance &rarr; Menus).</td></tr>
+<tr><th colspan="2" class="wg-sec">Link columns</th></tr>
+<tr><th scope="row">Column 1 menu</th><td>Choose one of your menus (Appearance &rarr; Menus).</td></tr>
+<tr><th scope="row">Column 2 menu</th><td>Choose one of your menus (Appearance &rarr; Menus).</td></tr>
+<tr><th scope="row">Show the contact column</th><td>Reads Dentalora &gt; Clinic details.</td></tr>
+<tr><th colspan="2" class="wg-sec">Bottom row</th></tr>
+<tr><th scope="row">Copyright text</th><td>Text.</td></tr>
+<tr><th scope="row">Legal links menu</th><td>Choose one of your menus (Appearance &rarr; Menus).</td></tr>
+<tr><th colspan="2" class="wg-sec">Labels and fixed texts</th></tr>
+<tr><th scope="row">1 texts</th><td>Every fixed word of the widget can be changed here, for example: Contact column title.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Main footer area</em>, <em>Style: Brand name</em>, <em>Style: Tagline</em>, <em>Style: Social icons</em>, <em>Style: Column titles</em>, <em>Style: Column links</em>, <em>Style: Contact lines</em>, <em>Style: Opening hours</em>, <em>Style: Bottom bar</em>, <em>Style: Copyright</em>, <em>Style: Registration number</em>, <em>Style: Legal links</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-page-header">
+<summary><span class="wg-name">Page header</span><span class="wg-group">Page structure</span><span class="wg-what">Title block for inner pages with breadcrumbs, intro text and chips.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/page-header.jpg"><img src="images/widgets/page-header.jpg" alt="The Page header widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>The title block at the top of inner pages, with breadcrumbs and a short introduction.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Type the "Eyebrow" (a small word above the title, such as "About"), the "Title" and the "Introduction".</li>
+<li>Wrap a word of the title in <code>&lt;em&gt;</code> to colour it with the accent colour.</li>
+<li>Switch "Show breadcrumbs" off if the page sits at the top level of your menu.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Content</th></tr>
+<tr><th scope="row">Eyebrow</th><td>Text.</td></tr>
+<tr><th scope="row">Title</th><td>Wrap a word in &lt;em&gt;...&lt;/em&gt; for the italic accent style.</td></tr>
+<tr><th scope="row">Introduction</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Show breadcrumbs</th><td>On or off.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-marquee">
+<summary><span class="wg-name">Marquee strip</span><span class="wg-group">Page structure</span><span class="wg-what">Slowly moving strip of treatment names (stops for reduced motion).</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/marquee.jpg"><img src="images/widgets/marquee.jpg" alt="The Marquee strip widget" loading="lazy"></a><figcaption>In the demo: Home - Boutique, Home - Precision, Home - Aura.</figcaption></figure>
+<p>A slowly moving strip of short words, such as your treatments.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Add one item per word or short phrase; turn on "Use the accent colour" to highlight one.</li>
+<li>Set "Seconds for one loop" (higher is slower) and keep "Pause on hover and focus" on.</li>
+<li>Visitors who ask their device for reduced motion see the strip standing still.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Items</th></tr>
+<tr><th scope="row">Items</th><td>A list you can add to, remove from and drag into order. Each item has: Text, Use the accent colour. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th scope="row">Seconds for one loop</th><td>A number.</td></tr>
+<tr><th scope="row">Pause on hover and focus</th><td>On or off.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Strip</em>, <em>Style: Words</em>, <em>Style: Separator dots</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-cta-band">
+<summary><span class="wg-name">Call-to-action band</span><span class="wg-group">Page structure</span><span class="wg-what">Full-width call-to-action band with two buttons and an optional background picture.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/cta-band.jpg"><img src="images/widgets/cta-band.jpg" alt="The Call-to-action band widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>A full-width band that asks visitors to book, with two buttons, short reassurances and an optional faint background picture.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Write the title and description in the Heading section.</li>
+<li>Set the primary and secondary button labels and links, for example "Book a visit" and your phone number as a <code>tel:</code> link.</li>
+<li>Add short reassurances (one per item) and, if you like, a "Faint background image".</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Buttons, image and reassurances</th></tr>
+<tr><th scope="row">Primary button label</th><td>Text.</td></tr>
+<tr><th scope="row">Primary button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th scope="row">Secondary button label</th><td>Without a link, the clinic phone number from Dentalora &gt; Clinic details is used.</td></tr>
+<tr><th scope="row">Secondary button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th scope="row">Faint background image</th><td>A picture from the Media Library.</td></tr>
+<tr><th scope="row">Reassurances</th><td>A list you can add to, remove from and drag into order. Each item has: Text. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Background image</em>, <em>Style: Headline</em>, <em>Style: Text</em>, <em>Style: Trust list</em>, <em>Style: Buttons</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-hero">
+<summary><span class="wg-name">Hero</span><span class="wg-group">Introductions</span><span class="wg-what">The top of the home page: headline, buttons, stats, pictures and a booking card.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/hero.jpg"><img src="images/widgets/hero.jpg" alt="The Hero widget" loading="lazy"></a><figcaption>In the demo: Home - Classic, Home - Boutique, Home - Precision, Home - Clarity and 2 more.</figcaption></figure>
+<p>The top of the home page: headline, buttons, figures, pictures and small cards. Six layouts, one per demo.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose a "Layout": Image stack, Arch portrait, Full-bleed photo, Centred with panorama, Split screen or Editorial headline.</li>
+<li>Under Text, write the eyebrow, title, introduction and both buttons.</li>
+<li>Add Statistics (value and label), then choose the "Main image" and "Second image".</li>
+<li>Switch on the cards you want: the Availability card (next free time), the Rating card and the Extra card. Each one only shows in the layouts that use it.</li>
+</ol>
+<div class="callout tip"><strong>Tip</strong>Use the image focus point (section 15) so faces stay in view when the picture is cropped on phones.</div>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Layout</th></tr>
+<tr><th scope="row">Layout</th><td>Choose: Image stack (Classic), Arch portrait (Boutique), Full-bleed photo (Precision), Centred with panorama (Clarity), Split screen (Sunny), Editorial headline (Aura).</td></tr>
+<tr><th colspan="2" class="wg-sec">Text</th></tr>
+<tr><th scope="row">Eyebrow</th><td>Text.</td></tr>
+<tr><th scope="row">Badge next to the eyebrow</th><td>Text.</td></tr>
+<tr><th scope="row">Title</th><td>Each line break starts a new line. Wrap a word in &lt;em&gt;...&lt;/em&gt; for the accent style.</td></tr>
+<tr><th scope="row">Introduction</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Primary button label</th><td>Text.</td></tr>
+<tr><th scope="row">Primary button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th scope="row">Secondary button label</th><td>Text.</td></tr>
+<tr><th scope="row">Secondary button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th colspan="2" class="wg-sec">Statistics</th></tr>
+<tr><th scope="row">Statistics</th><td>A list you can add to, remove from and drag into order. Each item has: Value, Label. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th colspan="2" class="wg-sec">Images</th></tr>
+<tr><th scope="row">Main image</th><td>Portrait for Arch and Split screen, interior for Image stack, wide photo for Full-bleed, Centred and Editorial.</td></tr>
+<tr><th scope="row">Second image</th><td>A picture from the Media Library.</td></tr>
+<tr><th colspan="2" class="wg-sec">Availability card</th></tr>
+<tr><th scope="row">Show the card</th><td>On or off.</td></tr>
+<tr><th scope="row">Label</th><td>Text.</td></tr>
+<tr><th scope="row">Time</th><td>Text.</td></tr>
+<tr><th scope="row">Text</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Button label</th><td>Text.</td></tr>
+<tr><th scope="row">Button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th colspan="2" class="wg-sec">Rating card</th></tr>
+<tr><th scope="row">Show the card</th><td>On or off.</td></tr>
+<tr><th scope="row">Score</th><td>Text.</td></tr>
+<tr><th scope="row">Text</th><td>Text.</td></tr>
+<tr><th scope="row">Small round photos (Arch layout)</th><td>Up to three photos shown beside the rating.</td></tr>
+<tr><th colspan="2" class="wg-sec">Extra card</th></tr>
+<tr><th scope="row">Show the card</th><td>On or off.</td></tr>
+<tr><th scope="row">Small heading</th><td>Text.</td></tr>
+<tr><th scope="row">Text</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Card image (Arch layout)</th><td>A picture from the Media Library.</td></tr>
+<tr><th scope="row">Big number (Image stack layout)</th><td>Text.</td></tr>
+<tr><th scope="row">Text beside the number</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th colspan="2" class="wg-sec">Full-bleed extras</th></tr>
+<tr><th scope="row">Vertical text on the right edge</th><td>Text.</td></tr>
+<tr><th scope="row">Scroll cue label</th><td>Text.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Background image</em>, <em>Style: Eyebrow line</em>, <em>Style: Badge</em>, <em>Style: Headline</em>, <em>Style: Intro text</em>, <em>Style: Stat boxes</em>, <em>Style: Stat values</em>, <em>Style: Stat labels</em>, <em>Style: Main image</em>, <em>Style: Second image</em>, <em>Style: Floating cards</em>, <em>Style: Card labels</em>, <em>Style: Card time</em>, <em>Style: Card text</em>, <em>Style: Big card number</em>, <em>Style: Rating score</em>, <em>Style: Vertical text</em>, <em>Style: Buttons</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-about">
+<summary><span class="wg-name">About and philosophy</span><span class="wg-group">Introductions</span><span class="wg-what">Practice story with pictures, a philosophy quote or a set of tiles.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/about.jpg"><img src="images/widgets/about.jpg" alt="The About and philosophy widget" loading="lazy"></a><figcaption>In the demo: Home - Classic, Home - Boutique, Home - Precision, Home - Clarity and 2 more.</figcaption></figure>
+<p>The story of the practice: a portrait with a note, a dark quote with pillars, or a dark section with a badge and tiles.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose the "Layout" and the "Section look" (light or dark).</li>
+<li>Write the heading and text, then fill in the part your layout uses: the Quote, or the Portrait with its note or badge.</li>
+<li>Add Points (title and text; an icon in the tiles layout) and up to two buttons.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Layout</th></tr>
+<tr><th scope="row">Section look</th><td>Choose: Light, soft surface, Dark.</td></tr>
+<tr><th scope="row">Layout</th><td>Choose: Story with portrait, Dark quote with pillars, Dark section with portrait, badge and tiles (Boutique).</td></tr>
+<tr><th colspan="2" class="wg-sec">Heading and text</th></tr>
+<tr><th scope="row">Eyebrow</th><td>Text.</td></tr>
+<tr><th scope="row">Title</th><td>Wrap a word in &lt;em&gt;...&lt;/em&gt; for the italic accent style.</td></tr>
+<tr><th scope="row">Title HTML tag</th><td>Choose: H1, H2, H3, H4, p.</td></tr>
+<tr><th scope="row">Description</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th colspan="2" class="wg-sec">Quote (philosophy layout)</th></tr>
+<tr><th scope="row">Quote</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Attribution</th><td>Text.</td></tr>
+<tr><th scope="row">Faint background image</th><td>A picture from the Media Library.</td></tr>
+<tr><th colspan="2" class="wg-sec">Portrait, note and badge (story and tiles layouts)</th></tr>
+<tr><th scope="row">Portrait</th><td>A picture from the Media Library.</td></tr>
+<tr><th scope="row">Badge number (tiles layout)</th><td>Text.</td></tr>
+<tr><th scope="row">Badge label (tiles layout)</th><td>Text.</td></tr>
+<tr><th scope="row">Note label (story layout)</th><td>Text.</td></tr>
+<tr><th scope="row">Note text</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Note author</th><td>Text.</td></tr>
+<tr><th colspan="2" class="wg-sec">Points</th></tr>
+<tr><th scope="row">Points</th><td>A list you can add to, remove from and drag into order. Each item has: Icon (tiles layout), Title, Text. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th scope="row">First button label</th><td>Text.</td></tr>
+<tr><th scope="row">First button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th scope="row">Second button label</th><td>Text.</td></tr>
+<tr><th scope="row">Second button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Main image</em>, <em>Style: Years badge</em>, <em>Style: Badge number</em>, <em>Style: Badge label</em>, <em>Style: Note card</em>, <em>Style: Note label</em>, <em>Style: Note quote</em>, <em>Style: Note author</em>, <em>Style: Large quote</em>, <em>Style: Quote author</em>, <em>Style: Point boxes</em>, <em>Style: Point numbers</em>, <em>Style: Point icons</em>, <em>Style: Point titles</em>, <em>Style: Point text</em>, <em>Style: Buttons</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-partners">
+<summary><span class="wg-name">Partners and trust bar</span><span class="wg-group">Introductions</span><span class="wg-what">Insurance and partner names as badges (or a ready-made example set of insurers and accreditations), or a row of trust statements.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/partners.jpg"><img src="images/widgets/partners.jpg" alt="The Partners and trust bar widget" loading="lazy"></a><figcaption>In the demo: Home - Classic, Home - Precision.</figcaption></figure>
+<p>Insurance, partner and accreditation names as badges or logos, or a row of short trust statements.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose the "Style": partner names or logos, or trust statements with icons.</li>
+<li>To see the layout quickly, pick an "Example set"; for your own list choose "My own list (below)" and add your partners.</li>
+<li>Only list insurers you really accept and bodies you really belong to, and use logos only with permission.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Content</th></tr>
+<tr><th scope="row">Style</th><td>Choose: Partner names or logos, Trust statements with icons.</td></tr>
+<tr><th scope="row">Example set</th><td>Fills the row with example names as plain text, so you can see the layout. Keep only the insurers you really accept and the bodies you really belong to. Logos are not included.</td></tr>
+<tr><th scope="row">Small heading</th><td>Text.</td></tr>
+<tr><th scope="row">Introduction cell</th><td>Optional text shown in the first cell.</td></tr>
+<tr><th scope="row">Partners</th><td>A list you can add to, remove from and drag into order. Each item has: Name, Logo (optional), Link. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th scope="row">Statements</th><td>A list you can add to, remove from and drag into order. Each item has: Icon, Statement, Small text. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Small heading</em>, <em>Style: Partner names</em>, <em>Style: Trust cells</em>, <em>Style: Trust icons</em>, <em>Style: Trust values</em>, <em>Style: Trust descriptions</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-features">
+<summary><span class="wg-name">Feature cards</span><span class="wg-group">Introductions</span><span class="wg-what">One lead card and three short highlight cards.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/features.jpg"><img src="images/widgets/features.jpg" alt="The Feature cards widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>One lead card and three short highlight cards, good under the hero.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Fill in the Lead card (eyebrow, big text and text) and choose its "Card style": light or dark highlight.</li>
+<li>Edit the three Cards: a big text such as "24/7", a title and a short line.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Lead card</th></tr>
+<tr><th scope="row">Eyebrow</th><td>Text.</td></tr>
+<tr><th scope="row">Big text</th><td>Text.</td></tr>
+<tr><th scope="row">Text</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Card style</th><td>Choose: Light, like the other cards, Dark highlight.</td></tr>
+<tr><th colspan="2" class="wg-sec">Cards</th></tr>
+<tr><th scope="row">Cards</th><td>A list you can add to, remove from and drag into order. Each item has: Big text, Title, Text. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Cards</em>, <em>Style: Large number</em>, <em>Style: Lead text</em>, <em>Style: Stat text</em>, <em>Style: Card titles</em>, <em>Style: Card text</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-numbers">
+<summary><span class="wg-name">Numbers band</span><span class="wg-group">Introductions</span><span class="wg-what">Band of large figures that count up when they scroll into view.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/numbers.jpg"><img src="images/widgets/numbers.jpg" alt="The Numbers band widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>A band of large figures that count up when they scroll into view.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Add one item per figure: the "Number", an optional "Small suffix" (such as + or %) and a "Label".</li>
+<li>Only use figures you can stand behind, such as years in practice or patients seen.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Numbers</th></tr>
+<tr><th scope="row">Items</th><td>A list you can add to, remove from and drag into order. Each item has: Number, Small suffix, Label. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Number cells</em>, <em>Style: Numbers</em>, <em>Style: Suffix</em>, <em>Style: Labels</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-why-us">
+<summary><span class="wg-name">Why choose us</span><span class="wg-group">Introductions</span><span class="wg-what">Reasons to choose you, with figures and short explanations.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/why-us.jpg"><img src="images/widgets/why-us.jpg" alt="The Why choose us widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>Reasons to choose your practice, with a few key figures.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Add Figures (value and label), for example years in practice and your average review score.</li>
+<li>Add Reasons with a title and text; switch on "Highlight with a tint" for the one that matters most.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Figures</th></tr>
+<tr><th scope="row">Figures</th><td>A list you can add to, remove from and drag into order. Each item has: Value, Label. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th colspan="2" class="wg-sec">Reasons</th></tr>
+<tr><th scope="row">Reasons</th><td>A list you can add to, remove from and drag into order. Each item has: Title, Text, Highlight with a tint. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Lead statement</em>, <em>Style: Figures area</em>, <em>Style: Reason rows</em>, <em>Style: Reason titles</em>, <em>Style: Reason text</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-services">
+<summary><span class="wg-name">Services</span><span class="wg-group">Treatments and pricing</span><span class="wg-what">Treatment cards from your Services or typed by hand, with icons and prices.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/services.jpg"><img src="images/widgets/services.jpg" alt="The Services widget" loading="lazy"></a><figcaption>In the demo: Home - Classic, Home - Boutique, Home - Precision, Home - Clarity and 3 more.</figcaption></figure>
+<p>Your treatments as cards with icons, prices and links, in a bento grid, equal cards or tall tiles.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose the "Layout".</li>
+<li>Set "Content source": "Use posts from the Dentalora menu" lists your Services (Dentalora Core &rarr; Services) automatically, with their own pages; "Write the items here" lets you type cards in the widget.</li>
+<li>For automatic cards, set the "Number of items" and optionally limit them to some categories.</li>
+<li>Add a "View all" link or button under the cards if you like.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Services</th></tr>
+<tr><th scope="row">Layout</th><td>Choose: Bento grid (first card larger), Equal cards with icons, Tall tiles with a bottom line (Classic).</td></tr>
+<tr><th scope="row">Content source</th><td>Choose: Write the items here, Use posts from the Dentalora menu.</td></tr>
+<tr><th scope="row">Number of items</th><td>A number.</td></tr>
+<tr><th scope="row">Only from these categories</th><td>Pick one or more.</td></tr>
+<tr><th scope="row">Services</th><td>A list you can add to, remove from and drag into order. Each item has: Title, Text, Small label, Link, Dark card, Light card tone, Bottom line (tiles layout), Icon (equal cards layout), Link text. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th colspan="2" class="wg-sec">View all link</th></tr>
+<tr><th scope="row">Label</th><td>Text.</td></tr>
+<tr><th scope="row">Link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th scope="row">Show the link as</th><td>Choose: Text link, Button.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Service cards</em>, <em>Style: Service icons</em>, <em>Style: Small numbers</em>, <em>Style: Service names</em>, <em>Style: Service text</em>, <em>Style: Bottom line</em>, <em>Style: Link text</em>, <em>Style: Arrow circle</em>, <em>Style: Buttons</em>, <em>Style: Text links</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-process">
+<summary><span class="wg-name">Process steps</span><span class="wg-group">Treatments and pricing</span><span class="wg-what">Numbered steps, a picture and a short fact card.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/process.jpg"><img src="images/widgets/process.jpg" alt="The Process steps widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>Numbered steps (for example your first visit), a picture and a small fact card.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose the "Section look": light, or dark with round step numbers.</li>
+<li>Edit the Steps (title and text). Four steps read best.</li>
+<li>Choose an Image and fill in the fact card label, value and text, for example "Treatment plan" and "3 to 6 weeks".</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Look</th></tr>
+<tr><th scope="row">Section look</th><td>Choose: Light, Dark with round step numbers (Boutique).</td></tr>
+<tr><th scope="row">Button below the steps (optional)</th><td>Text.</td></tr>
+<tr><th scope="row">Button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th colspan="2" class="wg-sec">Steps</th></tr>
+<tr><th scope="row">Steps</th><td>A list you can add to, remove from and drag into order. Each item has: Title, Text. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th colspan="2" class="wg-sec">Image and fact card</th></tr>
+<tr><th scope="row">Image</th><td>A picture from the Media Library.</td></tr>
+<tr><th scope="row">Card label</th><td>Text.</td></tr>
+<tr><th scope="row">Card value</th><td>Text.</td></tr>
+<tr><th scope="row">Card text</th><td>Text.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Steps</em>, <em>Style: Step numbers</em>, <em>Style: Step titles</em>, <em>Style: Step text</em>, <em>Style: Image</em>, <em>Style: Fact card</em>, <em>Style: Fact label</em>, <em>Style: Fact value</em>, <em>Style: Fact text</em>, <em>Style: Buttons</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-pricing">
+<summary><span class="wg-name">Pricing plans</span><span class="wg-group">Treatments and pricing</span><span class="wg-what">Plans with a monthly/annual switch and a highlighted plan.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/pricing.jpg"><img src="images/widgets/pricing.jpg" alt="The Pricing plans widget" loading="lazy"></a><figcaption>In the demo: Home - Classic, Home - Boutique, Home - Precision, Home - Clarity and 3 more.</figcaption></figure>
+<p>Treatment plans or membership plans, with an optional monthly / annual switch and a highlighted plan.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Switch on "Show a monthly / annual switch" if your plans have two prices, and set both labels.</li>
+<li>For each plan, fill in the name, description, currency symbol, price, the annual price if used, a note and the features (one per line).</li>
+<li>Add a "Badge" (such as "Most popular") to highlight one plan.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Plans</th></tr>
+<tr><th scope="row">Show a monthly / annual switch</th><td>Fill in the annual price of each plan to use it.</td></tr>
+<tr><th scope="row">Monthly label</th><td>Text.</td></tr>
+<tr><th scope="row">Annual label</th><td>Text.</td></tr>
+<tr><th scope="row">Plans</th><td>A list you can add to, remove from and drag into order. Each item has: Badge, Name, Short description, Text before the price, Currency symbol, Price, Price when billed annually, Note under the price, Features, Button label, Button link, Highlight (dark card). Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Billing switch</em>, <em>Style: Plan cards</em>, <em>Style: Badges</em>, <em>Style: Plan names</em>, <em>Style: Plan descriptions</em>, <em>Style: Currency sign</em>, <em>Style: Prices</em>, <em>Style: Price prefix (From)</em>, <em>Style: Price notes</em>, <em>Style: Feature lists</em>, <em>Style: Buttons</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-before-after">
+<summary><span class="wg-name">Before and after</span><span class="wg-group">Treatments and pricing</span><span class="wg-what">Result comparisons: one large slider with treatment tabs, a slider on every case, or a toggle button.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/before-after.jpg"><img src="images/widgets/before-after.jpg" alt="The Before and after widget" loading="lazy"></a><figcaption>In the demo: Home - Classic, Home - Precision, Home - Clarity, Home - Aura and 1 more.</figcaption></figure>
+<p>Treatment results: one large slider with treatment tabs, a slider on every case, or a button that shows the after photo.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose the "Comparison" (see the section on this widget below).</li>
+<li>Add Cases with a before and after picture, a short "Tab label", the treatment, a title and a detail line, or use the Cases you added in Dentalora Core.</li>
+<li>Keep the "Note below the cases" that results vary. Use real cases only with the patient's written permission.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Cases</th></tr>
+<tr><th scope="row">Comparison</th><td>Choose: One large slider with treatment tabs, Draggable slider on every case, Button toggles the after photo.</td></tr>
+<tr><th scope="row">Content source</th><td>Choose: Write the items here, Use posts from the Dentalora menu.</td></tr>
+<tr><th scope="row">Number of items</th><td>A number.</td></tr>
+<tr><th scope="row">Only from these categories</th><td>Pick one or more.</td></tr>
+<tr><th scope="row">Cases</th><td>A list you can add to, remove from and drag into order. Each item has: Before image, After image, Tab label, Treatment, Title, Detail. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th scope="row">Note below the cases</th><td>Text.</td></tr>
+<tr><th colspan="2" class="wg-sec">Labels and fixed texts</th></tr>
+<tr><th scope="row">3 texts</th><td>Every fixed word of the widget can be changed here, for example: Label on the before photo, Label on the after photo, Toggle button text.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Case cards</em>, <em>Style: Photo area</em>, <em>Style: Before / After labels</em>, <em>Style: Show after button</em>, <em>Style: Treatment name</em>, <em>Style: Case title</em>, <em>Style: Case detail</em>, <em>Style: Footnote</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-estimator">
+<summary><span class="wg-name">Cost estimator</span><span class="wg-group">Treatments and pricing</span><span class="wg-what">Four-input cost calculator that shows a total, a deposit and a monthly amount.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/estimator.jpg"><img src="images/widgets/estimator.jpg" alt="The Cost estimator widget" loading="lazy"></a><figcaption>In the demo: Pricing and insurance.</figcaption></figure>
+<p>A cost calculator: treatment, complexity, number of visits and sedation give a live total, a deposit and a monthly amount.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Set the "Currency code" (for example GBP, EUR or USD).</li>
+<li>Type the treatments as <code>name | base price</code>, one per line, the complexity levels as <code>name | multiplier</code> and the sedation options as <code>name | extra cost</code>.</li>
+<li>Set the cost per visit, the fewest and most visits, the deposit percentage and the months to spread the balance.</li>
+<li>Under Messages, set the two band limits and the three messages shown under the total.</li>
+</ol>
+<div class="callout tip"><strong>Tip</strong>Say in the description that the figure is an estimate and the final price is agreed at the consultation.</div>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Options</th></tr>
+<tr><th scope="row">Currency code</th><td>Text.</td></tr>
+<tr><th scope="row">Treatments (name | base price)</th><td>One per line, for example: Veneers | 3200</td></tr>
+<tr><th scope="row">Complexity (name | multiplier)</th><td>The base price is multiplied by this number.</td></tr>
+<tr><th scope="row">Sedation (name | extra cost)</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Cost per visit</th><td>A number.</td></tr>
+<tr><th scope="row">Fewest visits</th><td>A number.</td></tr>
+<tr><th scope="row">Most visits</th><td>A number.</td></tr>
+<tr><th scope="row">Deposit (percent)</th><td>A number.</td></tr>
+<tr><th scope="row">Months to spread the balance</th><td>A number.</td></tr>
+<tr><th colspan="2" class="wg-sec">Messages</th></tr>
+<tr><th scope="row">Low band up to</th><td>A number.</td></tr>
+<tr><th scope="row">Balanced band up to</th><td>A number.</td></tr>
+<tr><th scope="row">Message for the low band</th><td>Text.</td></tr>
+<tr><th scope="row">Message for the balanced band</th><td>Text.</td></tr>
+<tr><th scope="row">Message for the high band</th><td>Text.</td></tr>
+<tr><th colspan="2" class="wg-sec">Labels and fixed texts</th></tr>
+<tr><th scope="row">5 texts</th><td>Every fixed word of the widget can be changed here, for example: Treatment field label, Complexity field label, Number of visits label, Sedation field label and 1 more.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Form</em>, <em>Style: Field labels</em>, <em>Style: Fields</em>, <em>Style: Result card</em>, <em>Style: Result label</em>, <em>Style: Total</em>, <em>Style: Breakdown</em>, <em>Style: Message</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-guide">
+<summary><span class="wg-name">Guided chooser</span><span class="wg-group">Treatments and pricing</span><span class="wg-what">Short question-by-question chooser that points visitors to a treatment.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/guide.jpg"><img src="images/widgets/guide.jpg" alt="The Guided chooser widget" loading="lazy"></a><figcaption>In the demo: Services, Reviews.</figcaption></figure>
+<p>Two short questions that point a visitor to the right treatment or first step.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Write the label and options (one per line) for Question 1 and Question 2.</li>
+<li>Add Suggestions: for each pair of answers, the text to show.</li>
+<li>Fill in "When nothing matches", the button label and an optional link under the suggestion.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Question 1</th></tr>
+<tr><th scope="row">Label</th><td>Text.</td></tr>
+<tr><th scope="row">Options</th><td>One option per line.</td></tr>
+<tr><th colspan="2" class="wg-sec">Question 2</th></tr>
+<tr><th scope="row">Label</th><td>Text.</td></tr>
+<tr><th scope="row">Options</th><td>One option per line.</td></tr>
+<tr><th colspan="2" class="wg-sec">Suggestions</th></tr>
+<tr><th scope="row">Suggestions</th><td>A list you can add to, remove from and drag into order. Each item has: When the first answer is, and the second answer is, Suggestion. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th scope="row">When nothing matches</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">When a question is not answered</th><td>Text.</td></tr>
+<tr><th scope="row">Button label</th><td>Text.</td></tr>
+<tr><th scope="row">Link under the suggestion (label)</th><td>Text.</td></tr>
+<tr><th scope="row">Link under the suggestion</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th colspan="2" class="wg-sec">Labels and fixed texts</th></tr>
+<tr><th scope="row">1 texts</th><td>Every fixed word of the widget can be changed here, for example: Drop-down placeholder.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Box</em>, <em>Style: Question labels</em>, <em>Style: Drop-downs</em>, <em>Style: Result box</em>, <em>Style: Buttons</em>, <em>Style: Text links</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-comparison">
+<summary><span class="wg-name">Comparison tabs</span><span class="wg-group">Treatments and pricing</span><span class="wg-what">Tabs that compare options side by side.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/comparison.jpg"><img src="images/widgets/comparison.jpg" alt="The Comparison tabs widget" loading="lazy"></a><figcaption>In the demo: Services, Implant reconstruction.</figcaption></figure>
+<p>Tabs that compare options side by side, for example "replace or repair".</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Add one Tab per comparison, with a tab label.</li>
+<li>Inside each tab, add the cards: a title and a short list of points each.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Tabs</th></tr>
+<tr><th scope="row">Tabs</th><td>A list you can add to, remove from and drag into order. Each item has: Tab label, Cards. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Board</em>, <em>Style: Tab buttons</em>, <em>Style: Panel</em>, <em>Style: Cards</em>, <em>Style: Card titles</em>, <em>Style: Card lists</em>, <em>Style: Buttons</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-insights">
+<summary><span class="wg-name">Insights board</span><span class="wg-group">Treatments and pricing</span><span class="wg-what">Board of figures and notes with tabs.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/insights.jpg"><img src="images/widgets/insights.jpg" alt="The Insights board widget" loading="lazy"></a><figcaption>In the demo: Reviews.</figcaption></figure>
+<p>A small board of figures and notes in tabs, for example patient survey results.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Add a Tab per topic with a label.</li>
+<li>Inside each tab, add the figures (value and a short line under it).</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Tabs</th></tr>
+<tr><th scope="row">Tabs</th><td>A list you can add to, remove from and drag into order. Each item has: Tab label, Figures. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Board</em>, <em>Style: Tab buttons</em>, <em>Style: Panel</em>, <em>Style: Cards</em>, <em>Style: Labels</em>, <em>Style: Values</em>, <em>Style: Notes</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-info-cards">
+<summary><span class="wg-name">Info cards with filter</span><span class="wg-group">Treatments and pricing</span><span class="wg-what">Cards with a picture, text and an optional category filter.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/info-cards.jpg"><img src="images/widgets/info-cards.jpg" alt="The Info cards with filter widget" loading="lazy"></a><figcaption>In the demo: Services, Pricing and insurance.</figcaption></figure>
+<p>Cards with a picture or icon, a label, a highlight line and a short text, with optional filter buttons.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Add Cards; give each a "Category (used by the filter)" if you want filter buttons.</li>
+<li>Switch on "Show filter buttons" and set the label of the "show all" button.</li>
+<li>Use the highlight line for something like a price, and the footnotes for the small print.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Cards</th></tr>
+<tr><th scope="row">Show filter buttons</th><td>Buttons are made from the card categories.</td></tr>
+<tr><th scope="row">Label of the "show all" button</th><td>Text.</td></tr>
+<tr><th scope="row">Cards</th><td>A list you can add to, remove from and drag into order. Each item has: Category (used by the filter), Image (optional), Icon (optional), Small label above the title, Title, Highlight line (for example a price), Text, Footnotes, Link text, Link. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Filter buttons</em>, <em>Style: Cards</em>, <em>Style: Card images</em>, <em>Style: Card icons</em>, <em>Style: Tags</em>, <em>Style: Small label</em>, <em>Style: Card titles</em>, <em>Style: Prices</em>, <em>Style: Card text</em>, <em>Style: Meta line</em>, <em>Style: Text links</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-team">
+<summary><span class="wg-name">Team and doctors</span><span class="wg-group">People and trust</span><span class="wg-what">Doctors and staff from your Doctors or typed by hand, with an optional specialty filter.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/team.jpg"><img src="images/widgets/team.jpg" alt="The Team and doctors widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>Your dentists and staff with photos, roles and qualifications, with an optional specialty filter.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose the "Card look": photo with a hover panel, or cards with qualification chips.</li>
+<li>Set "Content source" to "Use posts from the Dentalora menu" to list your Doctors (Dentalora Core &rarr; Doctors); each card then links to the doctor's own page.</li>
+<li>Switch on "Show a specialty filter" to let visitors filter by specialty (set the specialty on each doctor).</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">People</th></tr>
+<tr><th scope="row">Card look</th><td>Choose: Photo with hover panel, Cards with qualification chips (Boutique).</td></tr>
+<tr><th scope="row">Header button text (optional)</th><td>Text.</td></tr>
+<tr><th scope="row">Header button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th scope="row">Content source</th><td>Choose: Write the items here, Use posts from the Dentalora menu.</td></tr>
+<tr><th scope="row">Number of items</th><td>A number.</td></tr>
+<tr><th scope="row">Only from these categories</th><td>Pick one or more.</td></tr>
+<tr><th scope="row">Show a specialty filter</th><td>Works with "Use posts" and groups people by their specialty.</td></tr>
+<tr><th scope="row">People</th><td>A list you can add to, remove from and drag into order. Each item has: Photo, Name, Role, Short bio, Qualifications, Profile or booking link. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th scope="row">Link text</th><td>Text.</td></tr>
+<tr><th colspan="2" class="wg-sec">Labels and fixed texts</th></tr>
+<tr><th scope="row">1 texts</th><td>Every fixed word of the widget can be changed here, for example: Filter "all" button.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Filter buttons</em>, <em>Style: Person cards</em>, <em>Style: Photos</em>, <em>Style: Text area</em>, <em>Style: Roles</em>, <em>Style: Names</em>, <em>Style: Short bios</em>, <em>Style: Qualification chips</em>, <em>Style: Qualification text</em>, <em>Style: Profile links</em>, <em>Style: Buttons</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-testimonials">
+<summary><span class="wg-name">Reviews</span><span class="wg-group">People and trust</span><span class="wg-what">Patient reviews as a stack or a grid, with optional filter and figures.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/testimonials.jpg"><img src="images/widgets/testimonials.jpg" alt="The Reviews widget" loading="lazy"></a><figcaption>In the demo: Reviews.</figcaption></figure>
+<p>Patient reviews as a stack beside key figures, or a grid with filter buttons.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose the "Layout".</li>
+<li>Use your Reviews (Dentalora Core &rarr; Reviews) or write stories in the widget: quote, name, treatment and stars.</li>
+<li>In the stack layout, add Key figures such as your average rating.</li>
+</ol>
+<div class="callout tip"><strong>Tip</strong>Only use real reviews, with the patient's permission.</div>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Layout and reviews</th></tr>
+<tr><th scope="row">Layout</th><td>Choose: Heading and figures beside a stack of stories, Grid of cards.</td></tr>
+<tr><th scope="row">Content source</th><td>Choose: Write the items here, Use posts from the Dentalora menu.</td></tr>
+<tr><th scope="row">Number of items</th><td>A number.</td></tr>
+<tr><th scope="row">Only from these categories</th><td>Pick one or more.</td></tr>
+<tr><th scope="row">Show filter buttons (grid layout)</th><td>Buttons are made from the story categories, for example Comfort or Aesthetic.</td></tr>
+<tr><th scope="row">Label of the "show all" button</th><td>Text.</td></tr>
+<tr><th scope="row">Stories</th><td>A list you can add to, remove from and drag into order. Each item has: Quote, Name, Treatment, Location (optional), Headline (optional), Category (for the filter), Stars (1 to 5). Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th colspan="2" class="wg-sec">Key figures</th></tr>
+<tr><th scope="row">Figures</th><td>A list you can add to, remove from and drag into order. Each item has: Value, Label. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Key figure boxes</em>, <em>Style: Key figure values</em>, <em>Style: Key figure labels</em>, <em>Style: Filter buttons</em>, <em>Style: Story cards</em>, <em>Style: Stars</em>, <em>Style: Headlines</em>, <em>Style: Quotes</em>, <em>Style: Initial circles</em>, <em>Style: Names</em>, <em>Style: Treatment lines</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-gallery">
+<summary><span class="wg-name">Clinic gallery</span><span class="wg-group">People and trust</span><span class="wg-what">Clinic picture grid with captions.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/gallery.jpg"><img src="images/widgets/gallery.jpg" alt="The Clinic gallery widget" loading="lazy"></a><figcaption>In the demo: Home - Boutique, Home - Precision, Home - Sunny, Home - Aura.</figcaption></figure>
+<p>A grid of photographs of your practice with captions.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Add Photographs with an image and a caption (the caption is also used as the picture description for screen readers).</li>
+<li>Add an optional link under the grid, such as "View full gallery".</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Photographs</th></tr>
+<tr><th scope="row">Photographs</th><td>A list you can add to, remove from and drag into order. Each item has: Image, Caption. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th scope="row">Link text</th><td>Text.</td></tr>
+<tr><th scope="row">Link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Photos</em>, <em>Style: Captions</em>, <em>Style: Text links</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-timeline">
+<summary><span class="wg-name">Timeline and journey</span><span class="wg-group">People and trust</span><span class="wg-what">Milestones or a patient journey in order.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/timeline.jpg"><img src="images/widgets/timeline.jpg" alt="The Timeline and journey widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>Milestones of the practice or the steps of a patient journey, as a vertical list or in columns.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose the "Layout": vertical list or columns.</li>
+<li>Add Steps with a label (a year or a number), a title and text.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Steps</th></tr>
+<tr><th scope="row">Layout</th><td>Choose: Vertical list, Columns.</td></tr>
+<tr><th scope="row">Steps</th><td>A list you can add to, remove from and drag into order. Each item has: Label (year or number), Title, Text. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Timeline entries</em>, <em>Style: Labels</em>, <em>Style: Titles</em>, <em>Style: Text</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-faq">
+<summary><span class="wg-name">FAQ accordion</span><span class="wg-group">People and trust</span><span class="wg-what">Accordion of questions, with an optional picture and contact card.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/faq.jpg"><img src="images/widgets/faq.jpg" alt="The FAQ accordion widget" loading="lazy"></a><figcaption>The demo pages build this kind of section with Elementor's own widgets; this is the ready-made version with every part styled.</figcaption></figure>
+<p>Questions and answers that open one at a time, with an optional picture, figures and a contact card.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Set "Content source": "Use posts from the Dentalora menu" lists your FAQ entries (Dentalora Core &rarr; FAQ); or write the questions in the widget.</li>
+<li>Choose "Keep only one answer open" and "Open the first answer".</li>
+<li>Add a contact card title, text and button for visitors who did not find their answer, and an optional image with figures.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Questions</th></tr>
+<tr><th scope="row">Content source</th><td>Choose: Write the items here, Use posts from the Dentalora menu.</td></tr>
+<tr><th scope="row">Number of items</th><td>A number.</td></tr>
+<tr><th scope="row">Only from these categories</th><td>Pick one or more.</td></tr>
+<tr><th scope="row">Questions</th><td>A list you can add to, remove from and drag into order. Each item has: Question, Answer. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th scope="row">Keep only one answer open</th><td>On or off.</td></tr>
+<tr><th scope="row">Open the first answer</th><td>On or off.</td></tr>
+<tr><th scope="row">Contact card title (optional)</th><td>Text.</td></tr>
+<tr><th scope="row">Contact card text</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Contact card button text</th><td>Text.</td></tr>
+<tr><th scope="row">Contact card button link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th colspan="2" class="wg-sec">Image and figures</th></tr>
+<tr><th scope="row">Image</th><td>A picture from the Media Library.</td></tr>
+<tr><th scope="row">Figures under the image</th><td>A list you can add to, remove from and drag into order. Each item has: Value, Label. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Image</em>, <em>Style: Figure boxes</em>, <em>Style: Figure values</em>, <em>Style: Figure labels</em>, <em>Style: Question rows</em>, <em>Style: Questions</em>, <em>Style: Plus / minus icon</em>, <em>Style: Answers</em>, <em>Style: Contact card</em>, <em>Style: Card title</em>, <em>Style: Card text</em>, <em>Style: Buttons</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-contact-form">
+<summary><span class="wg-name">Enquiry form</span><span class="wg-group">Contact</span><span class="wg-what">Appointment request form: honeypot, security token and server-side checks; sends an email.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/contact-form.jpg"><img src="images/widgets/contact-form.jpg" alt="The Enquiry form widget" loading="lazy"></a><figcaption>In the demo: Home - Classic, Home - Boutique, Home - Precision, Home - Clarity and 3 more.</figcaption></figure>
+<p>The enquiry and appointment request form. Requests are emailed to you and saved in Dentalora &rarr; Enquiries. See section 12 for the full setup.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose the "Layout": "Full enquiry form" or "Appointment request".</li>
+<li>Switch on the questions you want: preferred time of day, preferred date (a date picker), treatment, dentist and new or existing patient.</li>
+<li>Leave "Treatment choices" and "Dentist choices" empty to list your published services and team, or type your own list, one per line.</li>
+<li>Write the consent text, add a link to your privacy policy and set the button label.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Form</th></tr>
+<tr><th scope="row">Layout</th><td>Appointment request: a compact form beside a short list of reassurances, for home pages. The message becomes an optional note.</td></tr>
+<tr><th scope="row">Reassurances beside the form</th><td>One per line.</td></tr>
+<tr><th scope="row">Show the clinic phone number beside the form</th><td>On or off.</td></tr>
+<tr><th scope="row">Enquiry types</th><td>A list you can add to, remove from and drag into order. Each item has: Label. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th scope="row">Ask for a preferred time of day</th><td>On or off.</td></tr>
+<tr><th scope="row">Ask for a preferred date</th><td>The visitor picks a day. Your team still confirms the appointment by reply: nothing is booked automatically.</td></tr>
+<tr><th scope="row">Ask which treatment</th><td>On or off.</td></tr>
+<tr><th scope="row">Treatment choices</th><td>One per line. Leave empty to list your published services.</td></tr>
+<tr><th scope="row">Ask which dentist</th><td>On or off.</td></tr>
+<tr><th scope="row">Dentist choices</th><td>One per line. Leave empty to list your published team members.</td></tr>
+<tr><th scope="row">Ask whether they are a new or existing patient</th><td>On or off.</td></tr>
+<tr><th scope="row">Message label</th><td>Text.</td></tr>
+<tr><th scope="row">Consent text</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Privacy policy link (optional)</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th scope="row">Button label</th><td>Text.</td></tr>
+<tr><th colspan="2" class="wg-sec">Labels and fixed texts</th></tr>
+<tr><th scope="row">16 texts</th><td>Every fixed word of the widget can be changed here, for example: Reason group title, Name field label, Phone field label, Email field label and 12 more.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Form box</em>, <em>Style: Group titles</em>, <em>Style: Reason choices</em>, <em>Style: Field labels</em>, <em>Style: Fields</em>, <em>Style: Hints</em>, <em>Style: Consent text</em>, <em>Style: Result message</em>, <em>Style: Buttons</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-location">
+<summary><span class="wg-name">Location and opening hours</span><span class="wg-group">Contact</span><span class="wg-what">Address, opening hours, a map picture and directions links.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/location.jpg"><img src="images/widgets/location.jpg" alt="The Location and opening hours widget" loading="lazy"></a><figcaption>In the demo: Home - Precision, Home - Clarity, Home - Sunny, Contact.</figcaption></figure>
+<p>Address, phone and opening hours with a map picture and a directions link.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Fill in your address, phone and hours once in Dentalora &rarr; Clinic details; the widget reads them.</li>
+<li>Add Extra rows (label and text) for things like parking or step-free access.</li>
+<li>Choose a "Map picture" and a "Directions link". Optionally add a "Map embed address": the live map only loads after the visitor clicks the "Load map" button, so no map service is contacted before that.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Details</th></tr>
+<tr><th scope="row">Note under the phone number</th><td>Text.</td></tr>
+<tr><th scope="row">Extra rows</th><td>A list you can add to, remove from and drag into order. Each item has: Label, Text. Each item can also get its own colours under <em>Style this item</em>.</td></tr>
+<tr><th colspan="2" class="wg-sec">Map</th></tr>
+<tr><th scope="row">Map picture</th><td>A screenshot or illustration shown instead of a live map.</td></tr>
+<tr><th scope="row">Map embed address (optional)</th><td>The embed address from your map provider. It is only loaded after the visitor presses the button, because loading it shares their IP address with the provider.</td></tr>
+<tr><th scope="row">Load map button</th><td>Text.</td></tr>
+<tr><th scope="row">Notice shown with the button</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Directions link text</th><td>Text.</td></tr>
+<tr><th scope="row">Directions link</th><td>Leave empty to build a link from the clinic address.</td></tr>
+<tr><th colspan="2" class="wg-sec">Labels and fixed texts</th></tr>
+<tr><th scope="row">3 texts</th><td>Every fixed word of the widget can be changed here, for example: Address row label, Phone row label, Opening hours row label.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Map</em>, <em>Style: Info rows</em>, <em>Style: Row icons</em>, <em>Style: Row labels</em>, <em>Style: Row values</em>, <em>Style: Small text</em>, <em>Style: Opening hours lines</em>, <em>Style: Buttons</em>, <em>Style: Text links</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<details class="wg" id="w-journal">
+<summary><span class="wg-name">Journal posts</span><span class="wg-group">Content</span><span class="wg-what">Blog posts as a featured layout, grid, list or standard layout, with page numbers and a blog sidebar; also used for archive layouts.</span></summary>
+<div class="wg-body">
+<figure class="shot"><a href="images/widgets/journal.jpg"><img src="images/widgets/journal.jpg" alt="The Journal posts widget" loading="lazy"></a><figcaption>In the demo: Home - Classic, Home - Boutique, Home - Precision, Home - Clarity and 6 more.</figcaption></figure>
+<p>Your blog posts in four layouts (featured, grid, list, standard), with page numbers and a ready-made blog sidebar. The demo blog pages are all built with this widget.</p>
+<h4>How to set it up</h4>
+<ol>
+<li>Choose the "Layout" and the "Number of posts". For the grid, set the columns in Style &rarr; Section.</li>
+<li>On a blog page, switch on "Show page numbers". In an Archive layout template, switch on "Show the posts of the current archive" instead.</li>
+<li>Choose "Show a short excerpt" and its length, and the "Read more link text".</li>
+<li>Under Sidebar, put the sidebar on the right or left and choose the blocks: search, categories, recent posts, topics and a booking card. Or show your own Blog sidebar widget area.</li>
+</ol>
+<h4>Content tab settings</h4>
+<div class="table-wrap"><table class="wg-table">
+<tr><th colspan="2" class="wg-sec">Heading</th></tr>
+<tr><th scope="row">Eyebrow, Title, Title HTML tag, Description</th><td>The small word above the title, the title (wrap a word in <code>&lt;em&gt;</code> for the accent colour), its heading level and a short introduction. Leave them empty to show no heading.</td></tr>
+<tr><th colspan="2" class="wg-sec">Posts</th></tr>
+<tr><th scope="row">Layout</th><td>For the grid, set the number of columns in Style &gt; Section.</td></tr>
+<tr><th scope="row">Show the posts of the current archive</th><td>Use this in an Archive layout template: it lists the posts WordPress found for the page being viewed and adds page numbers.</td></tr>
+<tr><th scope="row">Number of posts</th><td>A number.</td></tr>
+<tr><th scope="row">Show page numbers</th><td>Adds page numbers below the posts when there are more posts than the number above. Use it on a blog page.</td></tr>
+<tr><th scope="row">Only from these categories</th><td>Pick one or more.</td></tr>
+<tr><th scope="row">Show a short excerpt</th><td>On or off.</td></tr>
+<tr><th scope="row">Excerpt length (words)</th><td>A number.</td></tr>
+<tr><th scope="row">Read more link text</th><td>Leave empty to hide the link; the whole card stays clickable.</td></tr>
+<tr><th scope="row">Link text</th><td>Text.</td></tr>
+<tr><th scope="row">Link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th colspan="2" class="wg-sec">Sidebar</th></tr>
+<tr><th scope="row">Sidebar</th><td>Choose: No sidebar, Sidebar on the right, Sidebar on the left.</td></tr>
+<tr><th scope="row">Sidebar content</th><td>The widget area is filled in Appearance &gt; Widgets.</td></tr>
+<tr><th scope="row">Search box</th><td>On or off.</td></tr>
+<tr><th scope="row">Categories with post counts</th><td>On or off.</td></tr>
+<tr><th scope="row">Recent posts with pictures</th><td>On or off.</td></tr>
+<tr><th scope="row">Topics (tags)</th><td>On or off.</td></tr>
+<tr><th scope="row">Booking card</th><td>On or off.</td></tr>
+<tr><th scope="row">Booking card title</th><td>Text.</td></tr>
+<tr><th scope="row">Booking card text</th><td>Text. Press Enter for a new line.</td></tr>
+<tr><th scope="row">Booking card button</th><td>Text.</td></tr>
+<tr><th scope="row">Booking card link</th><td>A link: a page of your site, another website, or <code>tel:</code> and a number.</td></tr>
+<tr><th colspan="2" class="wg-sec">Labels and fixed texts</th></tr>
+<tr><th scope="row">6 texts</th><td>Every fixed word of the widget can be changed here, for example: Search block title, Search box placeholder, Categories block title, Recent posts block title and 2 more.</td></tr>
+</table></div>
+<h4>Style tab</h4>
+<p><strong>Section</strong> (background, padding, spacing), <strong>Colours (light mode)</strong> and <strong>Colours (dark mode)</strong>, then one section for each part: <em>Style: Eyebrow</em>, <em>Style: Title</em>, <em>Style: Description</em>, <em>Style: Post cards</em>, <em>Style: Post images</em>, <em>Style: Text area</em>, <em>Style: Category tag</em>, <em>Style: Post titles</em>, <em>Style: Date line</em>, <em>Style: Excerpts</em>, <em>Style: Read more links</em>, <em>Style: Page numbers</em>, <em>Style: Sidebar blocks</em>, <em>Style: Sidebar titles</em>, <em>Style: Booking card</em>, <em>Style: Buttons</em>, <em>Style: Text links</em>. See <a href="#style-tab">the Style tab</a>.</p>
+</div>
+</details>
+<!-- widget-guide:end -->
 
 <h3>Partners widget: example insurance and accreditations</h3>
 <p>In the <strong>Partners and trust bar</strong> widget, the control <strong>Example set</strong> fills the row with example names as plain text so you can see the layout: <em>Accepted insurance</em>, <em>Clinical accreditations</em> or both. The names are only examples and no logos are included. Keep only the insurers you really accept and the bodies you really belong to, and for your own list choose <em>My own list</em> and type your names (or add logos you have the right to use).</p>
 
-<h3>The Style tab: every part can be styled</h3>
+<h3 id="style-tab">The Style tab: every part can be styled</h3>
 <p>Every widget has the same Style tab:</p>
 <ul>
 <li><strong>Section:</strong> background colour or image, padding, spacing between items, columns and heading alignment.</li>
@@ -430,9 +1360,29 @@
 </section>
 
 <section class="doc-section" id="layouts">
-<h2>11. Header, footer and archives</h2>
+<h2>11. Header, footer, blog and archives</h2>
 <p>Go to <strong>Layout templates &rarr; Add New</strong>, build the layout with Elementor, choose the <em>type</em> (header, footer, single or archive) and the <em>rule</em> (whole site, home page, posts, pages, services or doctors). The most specific matching template wins. For an archive layout use the <em>Journal posts</em> widget with <em>Use the main query</em> switched on.</p>
 <p>If no layout template matches, the theme's own header, footer and templates are used.</p>
+<h3 id="blog">Blog pages and layouts</h3>
+<p>The demo comes with four blog pages and two example posts in other layouts, all under <strong>Journal</strong> in the main menu:</p>
+<div class="table-wrap"><table>
+<tr><th>Blog grid</th><td>Cards in three columns with page numbers, full width.</td></tr>
+<tr><th>Blog grid with sidebar</th><td>Cards in two columns with the blog sidebar on the right.</td></tr>
+<tr><th>Blog list</th><td>One post per row, the picture beside the text, sidebar on the right.</td></tr>
+<tr><th>Blog standard</th><td>One post per row with a large picture above a longer excerpt, sidebar on the left.</td></tr>
+<tr><th>Post with sidebar</th><td>A single post with the blog sidebar beside the text (the demo post <em>Understanding dental implants</em>).</td></tr>
+<tr><th>Post with cover picture</th><td>A single post that opens with its featured picture across the full width and the title over it (the demo post <em>Inside the clinic</em>).</td></tr>
+</table></div>
+<p><strong>Make your own blog page.</strong> Create a page, edit it with Elementor, add a <em>Page header</em> widget and below it a <em>Journal posts</em> widget. In the Journal posts widget:</p>
+<ol>
+<li>Choose the <strong>Layout</strong>: <em>Grid of cards</em>, <em>List</em>, <em>Standard</em> or <em>One featured post and a stack</em> (the home page style). For the grid, set the columns in <strong>Style &rarr; Section &rarr; Columns</strong>, for example 3 on computers, 2 on tablets and 1 on phones.</li>
+<li>Set the <strong>Number of posts</strong> per page and switch on <strong>Show page numbers</strong>.</li>
+<li>Under <strong>Sidebar</strong>, choose the right or left side and the blocks to show: search, categories with post counts, recent posts with pictures, topics and a booking card with your own title, text and button. Or choose <em>The Blog sidebar widget area</em> to show the widgets from Appearance &rarr; Widgets.</li>
+<li>Leave the widget's Title empty when the page header already names the page; the post titles then become the next heading level, as they should.</li>
+</ol>
+<p><strong>The WordPress blog page.</strong> The page set as the posts page (Settings &rarr; Reading; <em>Journal</em> in the demo) and the category, tag and search pages use the Archive layout template when there is one, or the theme's own layout. Choose the theme layout in <strong>Appearance &rarr; Customize &rarr; Dentalora &rarr; Blog</strong>: <em>Blog layout</em> (grid, list or standard), <em>Show the sidebar on blog and archive pages</em> and <em>Sidebar side</em>.</p>
+<p><strong>Single posts.</strong> In the same Customizer section, <em>Post layout</em> sets the layout of every post: <em>Standard</em> (table of contents beside the text), <em>With the blog sidebar</em> or <em>Full-width cover picture</em>. A single post can choose its own layout in the <strong>Dentalora design</strong> box of the post editor (<em>Layout of this post</em>). A cover needs a featured picture and a sidebar needs widgets in the Blog sidebar; without them the standard layout is used.</p>
+<figure class="shot"><a href="images/widgets/journal.jpg"><img src="images/widgets/journal.jpg" alt="The Blog list page with the blog sidebar" loading="lazy"></a><figcaption>The Blog list page: the Journal posts widget in the List layout with the ready-made sidebar.</figcaption></figure>
 <h3>Block patterns for the Block Editor</h3>
 <p>If you write pages or posts with the standard Block Editor instead of Elementor, the theme adds four ready-made sections. Click the <strong>+</strong> button, open the <strong>Patterns</strong> tab and choose the category <strong>Dentalora Clinic</strong>.</p>
 <ul>
@@ -445,7 +1395,19 @@
 </section>
 
 <section class="doc-section" id="form">
-<h2>12. Enquiry and appointment request form</h2>
+<h2>12. Appointment requests and the enquiry form</h2>
+<h3 id="booking-steps">Set up appointment requests in 7 steps</h3>
+<ol>
+<li><strong>Add your practice details.</strong> Go to <strong>Dentalora &rarr; Clinic details</strong> and fill in the address, phone, emergency number, email and opening hours. The header, top bar, footer, location widget and the form use them.</li>
+<li><strong>Choose where requests go.</strong> In the same screen, under <em>Enquiry form</em>, set <em>Send enquiries to</em> and click <strong>Send a test email</strong>. If it does not arrive, see <a href="#mail">Making email reliable</a>.</li>
+<li><strong>Add the form to a page.</strong> Edit the page with Elementor and drag the <strong>Enquiry form</strong> widget into a section. In <em>Layout</em>, choose <strong>Appointment request</strong> for a compact form with reassurances and your phone number beside it, or <strong>Full enquiry form</strong> for a general contact form.</li>
+<li><strong>Choose the questions.</strong> Switch on what you need: <em>Ask for a preferred date</em> (visitors pick a day in a calendar date picker), <em>Ask for a preferred time of day</em> (morning, afternoon or evening), <em>Ask which treatment</em>, <em>Ask which dentist</em> and <em>Ask whether they are a new or existing patient</em>.</li>
+<li><strong>Fill the lists.</strong> Leave <em>Treatment choices</em> and <em>Dentist choices</em> empty to list your published Services and Doctors automatically, or type your own list, one per line.</li>
+<li><strong>Check the wording.</strong> Write the <em>Consent text</em>, add your <em>Privacy policy link</em> and set the <em>Button label</em>. Every other fixed word, such as field labels and the note under the button, is in <em>Labels and fixed texts</em>.</li>
+<li><strong>Answer the requests.</strong> New requests appear in <strong>Dentalora &rarr; Enquiries</strong> and in your email. Call or write back to agree the time, then set the status: <em>New</em>, <em>Contacted</em>, <em>Booked</em> or <em>Closed</em>.</li>
+</ol>
+<div class="callout"><strong>Requests, not automatic bookings.</strong> The form collects a preferred day and time; nothing is booked until your team confirms it. If patients should pick a free time slot themselves, use an online booking service and put its address in <strong>Dentalora &rarr; Clinic details &rarr; Online booking link</strong>: the header button then opens it (see <a href="#customizer">section 5</a>). You can link any Elementor button to it too.</div>
+<h3>How the form works</h3>
 <p>The <strong>Enquiry form</strong> widget works as an appointment request form. Visitors choose a reason, give their contact details, and can pick a preferred time of day, a preferred date and a treatment (your published services, or a list you type in the widget). The request arrives as an email to the address you enter in the widget or in Clinic details.</p>
 <p>The form has a hidden honeypot field, a security token that is fetched fresh when the page loads (so it also works behind page caching) and server-side validation. Every valid enquiry is emailed to you <strong>and, unless you switch it off, saved in a private inbox</strong> under <strong>Dentalora &rarr; Enquiries</strong>. A copy in the inbox means an enquiry is never lost when your host cannot send email.</p>
 <h3>Two layouts</h3>
@@ -465,7 +1427,7 @@
 <li><strong>Delete saved enquiries after</strong>: a number of days, checked once a day. 0 keeps them until you delete them. Choose a period that fits your local data protection rules.</li>
 <li><strong>Send a test email</strong>: sends a short message to the address above so you can see whether emails arrive.</li>
 </ul>
-<h3>Making email reliable</h3>
+<h3 id="mail">Making email reliable</h3>
 <p>WordPress sends mail through your web host's basic mail function. Many hosts block it and many inboxes treat its messages as spam. If no SMTP or mail-service plugin is active, Dentalora shows a notice on its own screens with a link to find one (WP Mail SMTP and FluentSMTP are free choices), a test button and a Dismiss button. If an email later fails, the notice returns and the inbox marks that enquiry as <em>Not delivered</em>, so you know to look there.</p>
 <div class="callout"><strong>Saved enquiries are personal data.</strong> Mention the form in your privacy policy (the plugin adds suggested text under Settings &rarr; Privacy). Patients can ask for a copy of their data or for it to be erased: use <strong>Tools &rarr; Export Personal Data</strong> and <strong>Erase Personal Data</strong>, which include Dentalora enquiries found by email address.</div>
 <div class="callout warn"><strong>Do not ask patients to enter medical details in a contact form.</strong> Add a short privacy note under the form, and make sure your practice's privacy policy covers it.</div>
@@ -643,7 +1605,7 @@ memory_limit = 256M</code></pre>
 		var heading = title;
 		var count = 0;
 
-		Array.prototype.forEach.call( section.querySelectorAll( 'h2, h3, p, li, tr, .callout, figcaption' ), function ( el ) {
+		Array.prototype.forEach.call( section.querySelectorAll( 'h2, h3, h4, summary, p, li, tr, .callout, figcaption' ), function ( el ) {
 			if ( el.closest( '.callout' ) && ! el.classList.contains( 'callout' ) ) {
 				return;
 			}
@@ -653,6 +1615,9 @@ memory_limit = 256M</code></pre>
 			var text = clean( el.textContent );
 			if ( 'H3' === el.tagName ) {
 				heading = text;
+			} else if ( 'SUMMARY' === el.tagName ) {
+				heading = clean( ( el.querySelector( '.wg-name' ) || el ).textContent );
+				text = heading + ': ' + clean( ( el.querySelector( '.wg-what' ) || el ).textContent );
 			}
 			if ( text.length < 2 ) {
 				return;
@@ -749,6 +1714,34 @@ memory_limit = 256M</code></pre>
 		options[ active ].scrollIntoView( { block: 'nearest' } );
 	}
 
+	// A result or a link inside a closed widget entry opens the entry first.
+	function openParents( el ) {
+		var details = el.closest ? el.closest( 'details' ) : null;
+		while ( details ) {
+			details.open = true;
+			details = details.parentElement ? details.parentElement.closest( 'details' ) : null;
+		}
+	}
+	function openFromHash() {
+		var target = window.location.hash ? document.getElementById( window.location.hash.slice( 1 ) ) : null;
+		if ( target ) {
+			openParents( target );
+			if ( 'DETAILS' === target.tagName ) {
+				target.open = true;
+			}
+			target.scrollIntoView();
+		}
+	}
+	window.addEventListener( 'hashchange', openFromHash );
+	if ( window.location.hash ) {
+		openFromHash();
+	}
+	window.addEventListener( 'beforeprint', function () {
+		Array.prototype.forEach.call( document.querySelectorAll( 'details' ), function ( d ) {
+			d.open = true;
+		} );
+	} );
+
 	function go( index ) {
 		var hit = shown[ index ];
 		if ( ! hit ) {
@@ -756,6 +1749,7 @@ memory_limit = 256M</code></pre>
 		}
 		var el = hit.item.el;
 		close();
+		openParents( el );
 		el.scrollIntoView( { behavior: window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ? 'auto' : 'smooth', block: 'center' } );
 		el.classList.remove( 'hit' );
 		void el.offsetWidth;
